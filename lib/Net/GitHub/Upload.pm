@@ -86,7 +86,7 @@ sub upload {
 
     # check duplicate filename
     my ($already_uploaded)
-        = grep { $_->{name} eq $info->{name} } @{ $self->list_files( $info->{repos} ) };
+        = grep { $_->{name} eq $info->{name} } @{ $self->list_files( $info->{repos} ) || []};
     if ($already_uploaded) {
         die qq[file '$already_uploaded->{name}' is already uploaded. please try different name];
     }
