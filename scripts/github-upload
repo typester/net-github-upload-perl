@@ -1,0 +1,46 @@
+#!/usr/bin/perl
+use strict;
+use Net::GitHub::Upload;
+use Pod::Usage;
+
+my($file, $repo) = @ARGV;
+
+unless ($file && $repo) {
+    pod2usage(1);
+}
+
+unless (-e $file) {
+    die "$file doesn't exist.\n";
+}
+
+chomp(my $user  = `git config github.user`);
+chomp(my $token = `git config github.token`);
+
+unless ($user && $token) {
+    die "git config github.user and github.token are missing.\n";
+}
+
+my $gh = Net::GitHub::Upload->new(
+    login => $user,
+    token => $token,
+);
+
+$gh->upload(
+    repos => $repo,
+    file  => $file,
+);
+
+print "$file uploaded to $repo\n";
+
+__END__
+
+=head1 NAME
+
+github-upload - Uploads a file to GitHub repository
+
+=head1 SYNOPSIS
+
+  github-upload filename repository
+  github-upload remedie-1.0.tar.bz2 miyagawa/remedie
+
+=end
