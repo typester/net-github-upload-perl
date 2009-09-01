@@ -13,5 +13,7 @@ install_script 'scripts/github-upload';
 
 test_requires 'Test::More';
 use_test_base;
+author_tests 'xt';
+
 auto_include;
 WriteAll;
