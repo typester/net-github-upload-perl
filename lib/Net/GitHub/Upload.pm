@@ -36,7 +36,7 @@ has ua => (
 
 has download_scraper => (
     is      => 'rw',
-    isa     => 'CodeRef',
+    isa     => 'Object',
     lazy    => 1,
     default => sub {
         my $self = shift;
