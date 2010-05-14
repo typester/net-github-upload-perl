@@ -43,4 +43,4 @@ github-upload - Uploads a file to GitHub repository
   github-upload filename repository
   github-upload remedie-1.0.tar.bz2 miyagawa/remedie
 
-=end
+=cut
