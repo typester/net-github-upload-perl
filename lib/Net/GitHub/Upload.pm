@@ -42,21 +42,19 @@ has download_scraper => (
         my $self = shift;
 
         my $fileinfo = scraper {
-            process '//tr',
-                id => '@id';
-            process '//td[2]/a',
+            process '//h4',
+                description => 'TEXT';
+            process '//h4/a',
                 link => '@href',
                 name => 'TEXT';
-            process '//td[3]',
-                description => 'TEXT';
-            process '//td[4]',
-                date => 'TEXT';
-            process '//td[5]',
+            process '//p/abbr',
+                date => '@title';
+            process '//p/strong',
                 size => 'TEXT';
         };
 
         my $downloads = scraper {
-            process '//div[@id="browser"]//tr[contains(@id, "download")',
+            process '//*[@id="manual_downloads"]/li',
                 "downloads[]" => $fileinfo;
             result 'downloads';
         };
