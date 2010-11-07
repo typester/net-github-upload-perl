@@ -92,7 +92,7 @@ sub upload {
     }
 
     my $res = $self->ua->request(
-        POST "http://github.com/$info->{repos}/downloads",
+        POST "https://github.com/$info->{repos}/downloads",
         [   file_size    => $info->{file} ? $info->{file}->stat->size
                                           : bytes::length( $info->{data} ),
             content_type => $info->{content_type} || 'application/octet-stream',
@@ -145,7 +145,7 @@ sub list_files {
     die "required repository name" unless $repos;
     $repos = $self->login . '/' . $repos unless $repos =~ m!/!;
 
-    my $uri = URI->new("http://github.com/${repos}/downloads");
+    my $uri = URI->new("https://github.com/${repos}/downloads");
     $uri->query_form(
         login => $self->login,
         token => $self->token,
