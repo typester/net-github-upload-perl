@@ -6,7 +6,7 @@ requires 'URI';
 requires 'LWP::UserAgent';
 requires 'Web::Scraper';
 requires 'Path::Class';
-requires 'XML::Simple';
+requires 'JSON';
 requires 'Pod::Usage';
 
 install_script 'scripts/github-upload';

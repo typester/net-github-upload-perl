@@ -8,7 +8,7 @@ use LWP::UserAgent;
 use HTTP::Request::Common;
 use Web::Scraper;
 use Path::Class qw/file/;
-use XML::Simple qw/XMLin/;
+use JSON;
 require bytes;
 
 has login => (
@@ -105,7 +105,7 @@ sub upload {
     die qq[Failed to post file info: "@{[ $res->status_line ]}"]
         unless $res->is_success;
 
-    my $upload_info = XMLin($res->content);
+    my $upload_info = decode_json $res->content;
 
     $res = $self->ua->request(
         POST 'http://github.s3.amazonaws.com/',
