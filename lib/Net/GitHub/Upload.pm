@@ -10,6 +10,7 @@ use Web::Scraper;
 use Path::Class qw/file/;
 use JSON;
 require bytes;
+require Crypt::SSLeay; # for https connection
 
 has login => (
     is       => 'rw',

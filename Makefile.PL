@@ -8,6 +8,7 @@ requires 'Web::Scraper';
 requires 'Path::Class';
 requires 'JSON';
 requires 'Pod::Usage';
+requires 'Crypt::SSLeay';
 
 install_script 'scripts/github-upload';
 
