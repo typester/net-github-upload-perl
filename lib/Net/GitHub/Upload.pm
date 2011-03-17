@@ -52,6 +52,8 @@ has download_scraper => (
                 date => '@title';
             process '//p/strong',
                 size => 'TEXT';
+            process '//li/a',
+                id   => '@href';
         };
 
         my $downloads = scraper {
