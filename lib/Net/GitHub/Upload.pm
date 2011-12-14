@@ -114,7 +114,7 @@ sub upload {
             Filename              => $info->{name},
             policy                => $upload_info->{policy},
             success_action_status => 201,
-            key                   => $upload_info->{prefix} . $info->{name},
+            key                   => $upload_info->{path},
             AWSAccessKeyId        => $upload_info->{accesskeyid},
             'Content-Type'        => $info->{content_type}
                                      || 'application/octet-stream',
