@@ -52,6 +52,8 @@ has download_scraper => (
                 date => '@title';
             process '//p/strong',
                 size => 'TEXT';
+            process '//li/a',
+                id   => '@href';
         };
 
         my $downloads = scraper {
@@ -103,6 +105,7 @@ sub upload {
     );
     die qq[Failed to post file info: "@{[ $res->status_line ]}"]
         unless $res->is_success;
+#" make vim happy
 
     my $upload_info = decode_json $res->content;
 
@@ -136,6 +139,43 @@ sub upload {
     else {
         die qq[Failed to upload: @{[$res->status_line]}];
     }
+}
+
+sub delete {
+    my $self = shift;
+    my $info = @_ > 1 ? {@_} : $_[0];
+
+    die "required repository name" unless $info->{repos};
+    $info->{repos} = $self->login . '/' . $info->{repos} unless $info->{repos} =~ m!/!;
+
+    die qq[required 'name' or 'fileinfo' parameter to delete]
+        unless $info->{name} or $info->{fileinfo};
+
+    my $idpath = do {
+        if ($info->{fileinfo}) {
+            $info->{fileinfo}->{id}
+        } else {
+            my @ids = grep { $_->{name} eq $info->{name} } @{ $self->list_files( $info->{repos} ) || []};
+            die qq[Multiple downloads matching "$info->{name}" found] if @ids > 1;
+            die qq[No download matching "$info->{name}" found] unless @ids;
+            ${ids[0]}->{id}
+        }
+    };
+
+    $idpath =~ s!^/!!;
+
+    my $res = $self->ua->request(
+        POST "https://github.com/$idpath",
+        [   _method      => "delete",
+            login        => $self->login,
+            token        => $self->token,
+        ],
+    );
+    die qq[Failed to post file info: "@{[ $res->status_line ]}"]
+        unless $res->is_success || $res->is_redirect;
+#" happy vim
+
+    return 1;
 }
 
 sub list_files {
@@ -184,6 +224,13 @@ $github->upload(
     repos => 'username/repository',
     name => 'filename',
     data => $data,
+);
+
+
+# delete a previously uploaded file
+$github->delete(
+    repos => 'username/repository',
+    name => 'filename',
 );
 
 =head1 DESCRIPTION
